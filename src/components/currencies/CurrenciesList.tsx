@@ -1,6 +1,6 @@
 import React from 'react';
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { CurrenciesApiResponse } from './CurrenciesListTyping';
 import CircularProgress from '@mui/material/CircularProgress';
 import List from '@mui/material/List';
@@ -9,19 +9,23 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { compare } from '../../helpers/data';
 import { Currency } from '../../model/currencies';
+import { CURRENCY_ACTION_TYPES } from '../../reducers/currency';
+import { ReducersContext } from '../../reducers/provider';
 import { CurrencySearch } from './CurrencySearch';
 
 export const CurrenciesList: React.FC = () => {
 
     const [ currenciesLoading, setCurrenciesLoading ] = React.useState<boolean>(true);
 
-    const [ currenciesLoadingError, setCurrenciesLoadingError ] = React.useState<string>('');
+    const [ currenciesLoadingError, setCurrenciesLoadingError ] = React.useState('');
 
-    const [ currencySearchValue, setCurrencySearchValue ] = React.useState<string>('');
+    const [ currencySearchValue, setCurrencySearchValue ] = React.useState('');
 
     const [ selectedCurrencyIdx, setSelectedCurrencyIdx ] = React.useState<number | undefined>();
 
     const [ currenciesData, setCurrenciesData ] = React.useState<Array<Currency>>([]);
+
+    const { dispatch } = React.useContext(ReducersContext);
 
     React.useEffect(
         () => {
@@ -48,12 +52,14 @@ export const CurrenciesList: React.FC = () => {
 
     const onCurrencyClick = React.useCallback(
         (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-            const code = event.currentTarget.getAttribute('data-code');
-            const idx = event.currentTarget.getAttribute('data-idx');
-            setSelectedCurrencyIdx(Number(idx));
-            console.log({code, idx});
+            const idx = Number(event.currentTarget.getAttribute('data-idx'));
+            setSelectedCurrencyIdx(idx);
+            dispatch({
+                type: CURRENCY_ACTION_TYPES.SET_CURRENCY_CODE,
+                payload: { currency: currenciesData[idx] },
+            });
         },
-        [],
+        [currenciesData],
     )
 
     const onCurrencySearchChange = React.useCallback<
@@ -66,17 +72,12 @@ export const CurrenciesList: React.FC = () => {
     )
 
     return (
-        <Box>
-            <Typography
-                variant='h4'
-            >
-                Currencies list
-            </Typography>
+        <Box sx={{ mt: 2 }}>
             <CurrencySearch
                 onCurrencySearchChange={onCurrencySearchChange}
             />
             {!!currenciesData.length ?
-                <List aria-label='currencies'>
+                <List aria-label='currencies' dense>
                     {currenciesData
                         .filter(({code, country}) => (
                             !currencySearchValue ||
@@ -85,7 +86,6 @@ export const CurrenciesList: React.FC = () => {
                         ))
                         .map(({code, country}, idx) => (
                             <ListItemButton
-                                data-code={code}
                                 data-idx={idx}
                                 key={`${idx}_${code}`}
                                 selected={selectedCurrencyIdx === idx}
@@ -104,11 +104,7 @@ export const CurrenciesList: React.FC = () => {
                     <CircularProgress />
                     :
                     !!currenciesLoadingError &&
-                        <Typography
-                            variant='body1'
-                        >
-                            {currenciesLoadingError}
-                        </Typography>
+                        <Alert severity="error">{currenciesLoadingError}</Alert>
             }
         </Box>
     );

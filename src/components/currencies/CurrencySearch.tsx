@@ -33,9 +33,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: 'inherit',
   '& .MuiInputBase-input': {
     border: `1px solid ${theme.palette.grey[500]}`,
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: 1,
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',

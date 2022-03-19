@@ -3,6 +3,4 @@ export interface Currency {
     country: string;
 }
 
-export interface CurrencyRates {
-    rates: Array<number>;
-}
+export type CurrencyRates = Array<number>;

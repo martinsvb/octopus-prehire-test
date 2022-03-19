@@ -6,18 +6,24 @@ import { Header } from './components/Header';
 import { Content } from './components/Content';
 import { CurrenciesList } from './components/currencies/CurrenciesList';
 import { CurrencyDetail } from './components/currencies/CurrencyDetail';
+import { initState, mainReducer, ReducersContext } from './reducers/provider'
 
 function App() {
+
+  const [ state, dispatch ] = React.useReducer(mainReducer, initState);
+
   return (
     <React.Fragment>
       <CssBaseline />
       <Container maxWidth="lg">
         <Box sx={{ height: '100vh' }}>
-          <Header />
-          <Content
-            mainContentCmp={<CurrenciesList />}
-            secondContentCmp={<CurrencyDetail />}
-          />
+          <ReducersContext.Provider value={{ state, dispatch }}>
+            <Header />
+            <Content
+              mainContentCmp={<CurrenciesList />}
+              secondContentCmp={<CurrencyDetail />}
+            />
+          </ReducersContext.Provider>
         </Box>
       </Container>
     </React.Fragment>
