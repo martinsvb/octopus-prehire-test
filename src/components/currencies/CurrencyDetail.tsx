@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-export const CurrencyRates: React.FC = () => {
+export const CurrencyDetail: React.FC = () => {
   return (
     <Box>
         <Typography
-            variant="h3"
+            variant="h4"
         >
-            Currencies rates
+            Currency detail
         </Typography>
     </Box>
   );

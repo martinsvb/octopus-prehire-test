@@ -5,7 +5,7 @@ import React from 'react';
 import { Header } from './components/Header';
 import { Content } from './components/Content';
 import { CurrenciesList } from './components/currencies/CurrenciesList';
-import { CurrencyRates } from './components/currencies/CurrencyRates';
+import { CurrencyDetail } from './components/currencies/CurrencyDetail';
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Header />
           <Content
             mainContentCmp={<CurrenciesList />}
-            secondContentCmp={<CurrencyRates />}
+            secondContentCmp={<CurrencyDetail />}
           />
         </Box>
       </Container>
